@@ -8,6 +8,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import CardComponent from './components/CardComponent';
 
 import App from './App.vue'
+import './registerServiceWorker'
 
 
 const router = createRouter({
