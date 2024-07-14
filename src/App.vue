@@ -1,13 +1,27 @@
 <script>
+	import { onMounted } from 'vue';
+	import { useReminderStore } from './stores/reminders';
 
+
+	export default {
+		setup: () => {
+
+			onMounted(() => {
+				const remindersStore = useReminderStore();
+
+				remindersStore.scheduleReminders();
+			})
+		}
+	}
 </script>
-
-
 
 <template>
 	<nav>
-		<router-link to="/">Home</router-link> |
-		<router-link to="/create">Create</router-link>
+		<router-link to="/">Accueil</router-link>
+		|
+		<router-link to="/create">Ajouter</router-link>
+		|
+		<router-link to="/reminders">Rappels</router-link>
 	</nav>
 	<router-view />
 </template>

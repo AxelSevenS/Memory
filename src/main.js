@@ -8,6 +8,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import CardComponent from './components/CardComponent';
 
 import App from './App.vue'
+import './registerServiceWorker'
 
 
 const router = createRouter({
@@ -20,6 +21,10 @@ const router = createRouter({
 		{
 			path: '/create',
 			component: () => import('./components/CreateCardComponent.vue').then(m => m.default)
+		},
+		{
+			path: '/reminders',
+			component: () => import('./pages/Reminders.vue').then(m => m.default)
 		}
 	]
 });
