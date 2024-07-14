@@ -21,6 +21,10 @@ const router = createRouter({
 		{
 			path: '/create',
 			component: () => import('./components/CreateCardComponent.vue').then(m => m.default)
+		},
+		{
+			path: '/reminders',
+			component: () => import('./pages/Reminders.vue').then(m => m.default)
 		}
 	]
 });
