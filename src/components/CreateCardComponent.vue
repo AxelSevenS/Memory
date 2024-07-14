@@ -1,15 +1,10 @@
 <script>
 	import { ref } from 'vue';
 	import { useCardStore } from '@/stores/cards';
-	import { CardComponent } from '@/components/CardComponent.vue';
 
 	export default {
 		name: 'CreateCardComponent',
 		props: {},
-
-		components: {
-			CardComponent,
-		},
 
 		setup() {
 			const cardsStore = useCardStore();
@@ -63,7 +58,7 @@
 				<input type="text" id="description" v-model="newCard.questionContent" required />
 
 				<label for="media">Média: </label>
-				<input type="file" id="media" ref="fileInputRef" @change="updateMedia" />
+				<input type="file" id="media" ref="fileInputRef" @change="updateMedia" accept="video/*,audio/*,image/*" />
 
 				<button type="submit">Valider</button>
 

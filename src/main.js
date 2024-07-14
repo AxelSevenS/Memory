@@ -1,40 +1,15 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
-import { createRouter, createWebHistory } from 'vue-router'
-
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-
+import App from './App.vue';
 import CardComponent from './components/CardComponent';
 
-import App from './App.vue'
-import './registerServiceWorker'
+import router from './router';
+import pinia from './pinia';
 
-
-const router = createRouter({
-	history: createWebHistory(),
-	routes: [
-		{
-			path: '/',
-			component: () => import('./pages/HomePage.vue').then(m => m.default)
-		},
-		{
-			path: '/create',
-			component: () => import('./components/CreateCardComponent.vue').then(m => m.default)
-		},
-		{
-			path: '/reminders',
-			component: () => import('./pages/Reminders.vue').then(m => m.default)
-		}
-	]
-});
-
-const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
-
+import './registerServiceWorker';
 
 createApp(App)
-	.use(router)
-	.use(pinia)
-	.component("CardComponent", CardComponent)
-	.mount('#app');
+.use(router)
+.use(pinia)
+.component("CardComponent", CardComponent)
+.mount('#app');
