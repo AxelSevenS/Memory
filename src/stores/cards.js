@@ -7,28 +7,32 @@ export const useCardStore = defineStore('cards', {
 	}),
 
 	actions: {
-		addCard(card) {
+		addCard(card , category) {
 			if (card.answerMedia) {
 				const reader = new FileReader();
 
 				reader.onload = (e) => {
 					card.answerMediaType = card.answerMedia.type;
 					card.answerMedia = e.target.result;
-					this.cards.push(card);
 				};
 				reader.readAsDataURL(card.answerMedia);
-			} else {
-				this.cards.push(card);
 			}
+			this.cards.push({
+				...card,
+				level: 0,
+				category: category,
+				lastReview: null,
+			});
 
 			console.log('Carte ajoutée: ', card);
 		},
 
 		removeCard(card) {
 			const index = this.cards.indexOf(card);
+
 			if (index >= 0) {
 				console.log('Carte retirée: ', card);
-				this.cards.splice(index, 1);
+				delete this.cards[index];
 			}
 		},
 

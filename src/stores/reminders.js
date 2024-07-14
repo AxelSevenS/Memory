@@ -9,7 +9,7 @@ export const useReminderStore = defineStore('reminders', {
 				enabled: false,
 				category: null,
 				lastReminded: new Date(),
-				frequency: new Date(15000),
+				remindTime: new Date(0, 0, 1, 10),
 			},
 		}
 	}),
@@ -74,23 +74,31 @@ export const useReminderStore = defineStore('reminders', {
 			const now = new Date(Date.now());
 
 			const lastReminded = new Date(this.reminders[topic].lastReminded);
-			const frequency = new Date(this.reminders[topic].frequency);
+			const remindTime = new Date(this.reminders[topic].remindTime);
 
-			const intervalsPassed = Math.floor((now - lastReminded) / frequency);
+			const nextReminder = new Date(
+				lastReminded.getFullYear(),
+				lastReminded.getMonth,
+				lastReminded.getDate(),
+				remindTime.getHours(),
+				remindTime.getMinutes(),
+				remindTime.getSeconds(),
+				remindTime.getMilliseconds()
+			);
 
-			// Show the reminder immediately, if it overdue.
-			if (intervalsPassed > 0) {
-				this.showReminderNotification(topic);
-				this.reminders[topic].lastReminded = now;
+			// Push the reminder immediately, if it's overdue.
+			if (now >= nextReminder) {
+				this.pushReminderNotification(topic);
+				this.reminders[topic].lastReminded = nextReminder;
+				nextReminder.setDate(nextReminder.getDate() + 1);
 			}
 
 			// Calculate the next reminder time
-			const nextReminder = new Date(lastReminded.getTime() + (intervalsPassed + 1) * frequency.getTime());
 			const delay = nextReminder.getTime() - now.getTime();
 			console.log(delay);
 
 			const timeoutId = setTimeout(() => {
-				this.showReminderNotification(topic);
+				this.pushReminderNotification(topic);
 				this.reminders[topic].lastReminded = new Date(Date.now());
 
 				this.scheduleReminder(topic);
@@ -99,7 +107,7 @@ export const useReminderStore = defineStore('reminders', {
 			reminderTimeouts[topic] = timeoutId;
 		},
 
-		showReminderNotification(topic) {
+		pushReminderNotification(topic) {
 			if ('serviceWorker' in navigator && 'PushManager' in window) {
 				navigator.serviceWorker.ready.then((registration) => {
 					const reminder = this.reminders[topic];

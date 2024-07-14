@@ -1,6 +1,6 @@
 <script>
 	export default {
-		name: 'HomePage',
+		name: 'ThemePage',
 		props: {},
 	}
 </script>
@@ -9,7 +9,7 @@
 
 <template>
 	<div>
-		<h1>Home</h1>
+		<h1>Theme</h1>
 	</div>
 </template>
 

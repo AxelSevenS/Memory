@@ -13,6 +13,16 @@
 			return {
 				flipRef
 			};
+		},
+
+		methods: {
+			async validAnswer() {
+				console.log(true);
+			},
+
+			async invalidAnswer() {
+				console.log(false);
+			},
 		}
 	}
 
@@ -20,46 +30,48 @@
 
 
 
-<template v-if="card">
-	<h6 class="toggle-labels">
-		<span color="primary">Retourner</span>
-	</h6>
+<template>
+	<div v-if="card && card.question && card.answer">
 
-	<label class="toggle-label" :class="{'flipped': flipRef}">
-		<input type="checkbox" class="toggle-btn" v-model="flipRef" />
-	</label>
+		<h6 class="toggle-labels">
+			<span color="primary">Retourner</span>
+		</h6>
 
-	<div class="card__container">
-		<div class="card__wrapper">
+		<label class="toggle-label" :class="{'flipped': flipRef}">
+			<input type="checkbox" class="toggle-btn" v-model="flipRef" />
+		</label>
 
-			<div class="card--front">
-				<h1 v-if="card.questionTitle">
-					{{ card.questionTitle }}
-				</h1>
-				<h2 v-if="card.questionContent">
-					{{ card.questionContent }}
-				</h2>
-			</div>
+		<div class="card__container">
+			<div class="card__wrapper">
 
-			<div class="card--back">
-				<h1 v-if="card.answerTitle">
-					{{ card.answerTitle }}
-				</h1>
-				<h2 v-if="card.answerContent">
-					{{ card.answerContent }}
-				</h2>
-
-				<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
-					<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
-
-					<video controls v-if="card.answerMediaType.startsWith('video')">
-						<source :src="card.answerMedia" :type="card.answerMediaType">
-					</video>
-
-					<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
+				<div class="card--front">
+					<h1>
+						{{ card.question }}
+					</h1>
 				</div>
+
+				<div class="card--back">
+					<h1>
+						{{ card.answer }}
+					</h1>
+
+					<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
+						<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
+
+						<video controls v-if="card.answerMediaType.startsWith('video')">
+							<source :src="card.answerMedia" :type="card.answerMediaType">
+						</video>
+
+						<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
+					</div>
+
+					<button @click="validAnswer">Correct</button>
+					<button @click="invalidAnswer">Pas Correct</button>
+				</div>
+
 			</div>
 		</div>
+
 	</div>
 
 </template>

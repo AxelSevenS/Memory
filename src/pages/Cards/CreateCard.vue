@@ -1,18 +1,25 @@
 <script>
 	import { ref } from 'vue';
+	import { useRoute, useRouter } from 'vue-router';
 	import { useCardStore } from '@/stores/cards';
 
 	export default {
-		name: 'CreateCardComponent',
+		name: 'CreateCardPage',
 		props: {},
 
 		setup() {
-			const cardsStore = useCardStore();
+			const route = useRoute();
+			const router = useRouter();
+			const categoryId = route.params.categoryId;
+
+			const cardStore = useCardStore();
+			const filteredCards = cardStore.cards.filter(card => card.category === categoryId);
+
 
 			const newCard = ref({
-				questionTitle: '',
-				questionContent: '',
+				question: '',
 
+				answer: '',
 				answerMedia: null,
 			});
 
@@ -24,11 +31,13 @@
 			};
 
 			const addCard = () => {
-				cardsStore.addCard({ ...newCard.value });
+				cardStore.addCard(newCard.value, route.params.categoryId);
 
-				newCard.value.questionTitle = '';
-				newCard.value.questionContent = '';
+				router.push(`/cards/${newCard.value.question}`)
 
+				newCard.value.question = '';
+
+				newCard.value.answer = '';
 				newCard.value.answerMedia = null;
 				if (fileInputRef.value) fileInputRef.value.value = null;
 			};
@@ -40,7 +49,7 @@
 				addCard,
 				updateMedia,
 
-				cards: cardsStore.cards,
+				cards: filteredCards,
 			};
 		}
 	};
@@ -51,25 +60,22 @@
 		<section class="create-card__child">
 			<form class="create-card__child-form" @submit.prevent="addCard">
 				<h1>Ajouter une Carte</h1>
-				<label for="title">Titre: </label>
-				<input type="text" id="title" v-model="newCard.questionTitle" required />
 
-				<label for="description">Contenu: </label>
-				<input type="text" id="description" v-model="newCard.questionContent" required />
+				<label for="title">Question: </label>
+				<input type="text" id="title" v-model="newCard.question" required />
+
+
+				<label for="description">Réponse: </label>
+				<input type="text" id="description" v-model="newCard.answer" required />
 
 				<label for="media">Média: </label>
 				<input type="file" id="media" ref="fileInputRef" @change="updateMedia" accept="video/*,audio/*,image/*" />
 
-				<button type="submit">Valider</button>
 
+				<button type="submit">Valider</button>
+				<!-- <CardList :cards="cards" /> -->
 			</form>
 		</section>
-
-		<ul>
-			<li v-for="card in cards" :key="card.title">
-				<CardComponent :card="card" />
-			</li>
-		</ul>
 	</div>
 </template>
 
@@ -89,7 +95,7 @@
 			font-size: 2rem;
 			font-weight: bold;
 			text-decoration: underline ;
-			font-family: Russo One, sans-serif;
+			font-family: 'Russo One', sans-serif;
 
 		}
 
@@ -106,52 +112,10 @@
 				margin-top: 1rem;
 
 				font-weight: bold;
-				font-family: Russo One, sans serif;
+				font-family: 'Russo One', sans-serif;
 				display: flex;
 				justify-content: baseline;
 
-			}
-
-			& input {
-				padding: 0,5rem;
-				width: 60%;
-				height: 3rem;
-				margin: 1rem 0;
-				border-radius: 5px;
-				border: 1px solid #ccc;
-				color: #42b983;
-				font-size: 1.5rem;
-				font-family: Russo One, sans-serif;
-			}
-
-			& input[type="file"] {
-				padding: 0,5rem;
-				width: 60%;
-				height: 3rem;
-				margin: 1rem 0;
-				// border-radius: 5px;
-				// border: 1px solid #ccc;
-				// color: #42b983;
-				font-size: 1.5rem;
-				font-family: Russo One, sans-serif;
-
-			}
-
-			& button {
-				color: white;
-				width: 50%;
-				height: 3rem;
-				margin: 1rem 0;
-				border-radius: 5px;
-				border: 1px solid #ccc;
-				background-color: #42b983;
-				font-size: 1.5rem;
-				font-weight: bold;
-				font-family: Russo One, sans serif;
-				&:hover {
-					background-color: #2c3e50;
-					cursor: pointer;
-				}
 			}
 
 			&-form {
@@ -162,15 +126,17 @@
 				flex-direction: column;
 				justify-content: center;
 				align-items: center;
+
+
 				& h1 {
 					font-size: 2rem;
 					font-weight: bold;
-					font-family: Russo One, sans-serif;
+					font-family: 'Russo One', sans-serif;
 				}
 				& label {
 					font-size: 1.5rem;
 					font-weight: bold;
-					font-family: Russo One, sans-serif;
+					font-family: 'Russo One', sans-serif;
 				}
 			}
 		}
