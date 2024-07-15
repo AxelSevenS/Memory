@@ -1,5 +1,6 @@
 <script>
 	import { useCardStore } from '@/stores/cards';
+	import { ref } from 'vue';
 
 	export default {
 		name: 'HomePage',
@@ -7,17 +8,15 @@
 		setup() {
 			const cardStore = useCardStore();
 
-			const today = Date.now() / 1000 / 60 / 60 / 24;
+			const todaysCards = ref(cardStore.todaysCards);
+			cardStore.$subscribe(() => {
+				todaysCards.value = cardStore.todaysCards;
 
-			const todaysCards = cardStore.cards.filter(card => {
-				if (card.lastReviewDay === null) return true;
-				const lastReviewDay = new Date(card.lastReviewDay).getTime() / 1000 / 60 / 60 / 24;
-				const dateOffset = Math.floor(today - lastReviewDay);
+			})
 
-				return dateOffset >= Math.pow(2, card.level);
-			});
-
-			console.log(todaysCards);
+			return {
+				todaysCards
+			};
 		},
 	}
 </script>
@@ -28,6 +27,14 @@
 	<div>
 		<h1>Home</h1>
 	</div>
+	<ul v-if="todaysCards.length !== 0">
+		<li v-for="card in todaysCards" :key="card.title">
+			<CardComponent :card="card" :isQuiz="true" />
+		</li>
+	</ul>
+	<h2 v-else>
+		Il n'y a plus rien à réviser pour aujourd'hui ! :)
+	</h2>
 </template>
 
 

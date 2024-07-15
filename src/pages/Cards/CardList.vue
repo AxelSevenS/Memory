@@ -11,8 +11,7 @@
 			const categoryId = route.params.categoryId;
 
 			const cardStore = useCardStore();
-			const filteredCards = cardStore.cards.filter(category => category.category === categoryId);
-			console.log(cardStore.cards);
+			const filteredCards = cardStore.fromCategory(categoryId);
 
 			return {
 				categoryId: categoryId,

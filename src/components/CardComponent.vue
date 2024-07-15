@@ -1,29 +1,35 @@
 <script>
 	import { ref } from 'vue';
+	import { useCardStore } from '@/stores/cards';
+
 
 	export default {
 		name: 'CardComponent',
 		props: [
 			'card',
+			'isQuiz'
 		],
 
 		setup() {
+			const cardStore = useCardStore();
 			const flipRef = ref(false);
 
 			return {
-				flipRef
+				cardStore,
+				flipRef,
 			};
 		},
 
 		methods: {
-			async validAnswer() {
-				console.log(true);
+			validateAnswer: (state) => (card) => {
+				console.log(state);
+				state.cardStore.validate(card.id);
 			},
 
-			async invalidAnswer() {
-				console.log(false);
+			invalidateAnswer: (state) => (card) => {
+				state.cardStore.invalidate(card.id);
 			},
-		}
+		},
 	}
 
 </script>
@@ -65,8 +71,10 @@
 						<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
 					</div>
 
-					<button @click="validAnswer">Correct</button>
-					<button @click="invalidAnswer">Pas Correct</button>
+					<div v-if="isQuiz">
+						<button @click="cardStore.validate(card.id)">Correct</button>
+						<button @click="cardStore.invalidate(card.id)">Pas Correct</button>
+					</div>
 				</div>
 
 			</div>

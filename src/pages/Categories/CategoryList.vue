@@ -10,7 +10,7 @@
 			const themeId = useRoute().params.themeId;
 
 			const categoryStore = useCategoryStore();
-			const filteredCategories = categoryStore.categories.filter(category => category.theme === themeId);
+			const filteredCategories = categoryStore.fromTheme(themeId);
 
 			return {
 				themeId: themeId,

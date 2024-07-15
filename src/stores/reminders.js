@@ -95,7 +95,6 @@ export const useReminderStore = defineStore('reminders', {
 
 			// Calculate the next reminder time
 			const delay = nextReminder.getTime() - now.getTime();
-			console.log(delay);
 
 			const timeoutId = setTimeout(() => {
 				this.pushReminderNotification(topic);

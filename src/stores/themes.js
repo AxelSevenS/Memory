@@ -2,14 +2,17 @@ import { defineStore } from 'pinia';
 
 export const useThemeStore = defineStore('themes', {
 	state: () => ({
-		themes: [],
+		themes: {},
 	}),
 
 	actions: {
 		addTheme(theme) {
-			this.themes.push({
-				...theme
-			});
+			const id = encodeURIComponent(theme.title);
+
+			this.themes[id] = {
+				...theme,
+				id: id,
+			};
 
 			console.log('Thème ajouté: ', theme);
 		},
@@ -22,6 +25,12 @@ export const useThemeStore = defineStore('themes', {
 				delete this.themes[index];
 			}
 		},
+	},
+
+	getters: {
+		totalThemes: (state) => {
+			return state.themes.length;
+		}
 	},
 
 	persist: {

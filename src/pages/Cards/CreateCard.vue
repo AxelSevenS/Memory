@@ -10,10 +10,8 @@
 		setup() {
 			const route = useRoute();
 			const router = useRouter();
-			const categoryId = route.params.categoryId;
 
 			const cardStore = useCardStore();
-			const filteredCards = cardStore.cards.filter(card => card.category === categoryId);
 
 
 			const newCard = ref({
@@ -48,8 +46,6 @@
 
 				addCard,
 				updateMedia,
-
-				cards: filteredCards,
 			};
 		}
 	};

@@ -3,15 +3,18 @@ import { defineStore } from 'pinia'
 
 export const useCategoryStore = defineStore('categories', {
 	state: () => ({
-		categories: [],
+		categories: {},
 	}),
 
 	actions: {
 		addCategory(category, theme) {
-			this.categories.push({
+			const id = encodeURIComponent(category.title);
+
+			this.categories[id] = {
 				...category,
+				id: id,
 				theme: theme
-			});
+			};
 
 			console.log('Catégorie ajoutée: ', category);
 		},
@@ -24,17 +27,21 @@ export const useCategoryStore = defineStore('categories', {
 				delete this.categories[index];
 			}
 		},
-
-		modifyCategory(category) {
-			console.log(category);
-		}
 	},
 
 	getters: {
 		totalCategories: (state) => {
-			console.log('Nombre de catégories: ', state.categories);
 			return state.categories.length;
-		}
+		},
+
+		fromTheme: (state) => (theme) => {
+			return Object.keys(state.categories)
+				.filter( id => {
+					const category = state.categories[id];
+					return category.theme === theme;
+				})
+				.map( id => state.categories[id] );
+		},
 	},
 
 	persist: {
