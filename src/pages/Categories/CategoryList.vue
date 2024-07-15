@@ -1,5 +1,6 @@
 <script>
-	import { useRoute } from 'vue-router'
+	import { useRoute, useRouter } from 'vue-router'
+	import { useThemeStore } from '@/stores/themes';
 	import { useCategoryStore } from '@/stores/categories';
 
 	export default {
@@ -7,9 +8,18 @@
 		props: {},
 
 		setup() {
-			const themeId = useRoute().params.themeId;
-
+			const themeStore = useThemeStore();
 			const categoryStore = useCategoryStore();
+			const router = useRouter();
+			const route = useRoute();
+
+			const themeId = route.params.themeId;
+			const theme = themeStore.themes[themeId];
+
+			console.log(themeId);
+			if (! theme) router.push('/');
+
+
 			const filteredCategories = categoryStore.fromTheme(themeId);
 
 			return {

@@ -22,9 +22,6 @@
 			<div v-if="!newTheme.title">
 				<p>Theme not created yet.</p>
 			</div>
-			<!-- <router-link :to="'/category/theme/' + newTheme.title">
-				<button>Creer une categorie</button>
-			</router-link> -->
 		</form>
 		<div v-if="newTheme.title">
 			<p>Theme created: {{ newTheme.title }}</p>
@@ -36,8 +33,4 @@
 
 
 <style lang="scss">
-	// h1 {
-	// 	color: red;
-	// 	font-size: 500px;
-	// }
 </style>

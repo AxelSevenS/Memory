@@ -1,3 +1,4 @@
+import { toKebabCase } from '@/utility';
 import { defineStore } from 'pinia';
 
 export const useThemeStore = defineStore('themes', {
@@ -7,14 +8,17 @@ export const useThemeStore = defineStore('themes', {
 
 	actions: {
 		addTheme(theme) {
-			const id = encodeURIComponent(theme.title);
+			const id = toKebabCase(theme.title);
+			console.log(toKebabCase('SeXe Anal Wawéé'));
 
-			this.themes[id] = {
+			const newTheme = this.themes[id] = {
 				...theme,
 				id: id,
 			};
 
-			console.log('Thème ajouté: ', theme);
+			console.log('Thème ajouté: ', newTheme);
+
+			return newTheme;
 		},
 
 		removeTheme(theme) {

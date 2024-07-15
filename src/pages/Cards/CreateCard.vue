@@ -2,16 +2,22 @@
 	import { ref } from 'vue';
 	import { useRoute, useRouter } from 'vue-router';
 	import { useCardStore } from '@/stores/cards';
+	import { useCategoryStore } from '@/stores/categories';
 
 	export default {
 		name: 'CreateCardPage',
 		props: {},
 
 		setup() {
-			const route = useRoute();
-			const router = useRouter();
-
 			const cardStore = useCardStore();
+			const categoryStore = useCategoryStore();
+			const router = useRouter();
+			const route = useRoute();
+
+			const categoryId = route.params.categoryId;
+			const category = categoryStore.categories[categoryId];
+
+			if (! category) router.push('/');
 
 
 			const newCard = ref({
@@ -29,9 +35,9 @@
 			};
 
 			const addCard = () => {
-				cardStore.addCard(newCard.value, route.params.categoryId);
+				const addedCard = cardStore.addCard(newCard.value, route.params.categoryId);
 
-				router.push(`/cards/${newCard.value.question}`)
+				router.push(`/cards/${addedCard.id}`)
 
 				newCard.value.question = '';
 

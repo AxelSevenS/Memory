@@ -5,8 +5,8 @@ let reminderTimeout;
 export const useConfigStore = defineStore('config', {
 	state: () => ({
 		config: {
-			cardsPerDay: 500000,
-			maxCardLevel: 6, // 0-6 -> 7 levels
+			cardsPerDay: 5,
+			maxCardLevel: 6, // 0->6 = 7 levels
 			reminder: {
 				enabled: false,
 				time: new Date(0, 0, 1, 10),
@@ -38,12 +38,16 @@ export const useConfigStore = defineStore('config', {
 		},
 
 		disableReminder() {
+			this.clearReminder();
+
+			this.config.enabled = false;
+		},
+
+		clearReminder() {
 			if (reminderTimeout !== undefined) {
 				clearTimeout(reminderTimeout);
 				reminderTimeout = undefined;
 			}
-
-			this.config.enabled = false;
 		},
 
 		scheduleReminder() {
@@ -53,10 +57,12 @@ export const useConfigStore = defineStore('config', {
 			const remindTime = this.config.reminder.remindTime ? new Date(this.config.reminder.remindTime) : new Date(0, 0, 1, 10);
 
 			const nextReminder = new Date(lastReminded);
-			nextReminder.setHours(remindTime.getHours()),
-			nextReminder.setMinutes(remindTime.getMinutes()),
-			nextReminder.setSeconds(remindTime.getSeconds()),
-			nextReminder.setMilliseconds(remindTime.getMilliseconds());
+			nextReminder.setHours(
+				remindTime.getHours(),
+				remindTime.getMinutes(),
+				remindTime.getSeconds(),
+				remindTime.getMilliseconds()
+			);
 
 			// Push the reminder immediately, if it's overdue.
 			if (now >= nextReminder) {
@@ -76,6 +82,14 @@ export const useConfigStore = defineStore('config', {
 			}, delay);
 
 			reminderTimeout = timeoutId;
+		},
+
+
+		updateReminder() {
+			this.clearReminder();
+			if (this.config.reminder.enabled) {
+				this.scheduleReminder();
+			}
 		},
 
 		pushReminderNotification() {

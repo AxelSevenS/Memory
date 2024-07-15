@@ -5,9 +5,13 @@
 	export default {
 		setup: () => {
 			onMounted(() => {
-				const preferenceStore = useConfigStore();
+				const configStore = useConfigStore();
 
-				preferenceStore.awakenReminder();
+				configStore.awakenReminder();
+
+				configStore.$subscribe(() => {
+					configStore.updateReminder();
+				})
 			})
 		}
 	}
@@ -138,4 +142,6 @@
 		display: flex;
 		justify-content: center;
 	}
+
+
 </style>

@@ -16,9 +16,9 @@
 			});
 
 			const addTheme = () => {
-				themeStore.addTheme(newTheme.value);
+				const addedTheme = themeStore.addTheme(newTheme.value);
 
-				router.push(`/categories/list/${newTheme.value.title}`)
+				router.push(`/categories/list/${addedTheme.id}`)
 
 				newTheme.value.title = '';
 			};

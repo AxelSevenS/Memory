@@ -1,4 +1,5 @@
 // import { get } from 'core-js/core/dict'
+import { toKebabCase } from '@/utility';
 import { defineStore } from 'pinia'
 
 export const useCategoryStore = defineStore('categories', {
@@ -8,15 +9,17 @@ export const useCategoryStore = defineStore('categories', {
 
 	actions: {
 		addCategory(category, theme) {
-			const id = encodeURIComponent(category.title);
+			const id = toKebabCase(category.title);
 
-			this.categories[id] = {
+			const newCategory = this.categories[id] = {
 				...category,
 				id: id,
 				theme: theme
 			};
 
-			console.log('Catégorie ajoutée: ', category);
+			console.log('Catégorie ajoutée: ', newCategory);
+
+			return newCategory;
 		},
 
 		removeCategory(category) {

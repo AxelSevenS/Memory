@@ -1,14 +1,18 @@
 <script>
+	import { useRoute, useRouter } from 'vue-router';
 	import { useCardStore } from '@/stores/cards';
-	import { useRoute } from 'vue-router';
 
 	export default {
 		name: 'CardPage',
 		setup() {
-			const cardsStore = useCardStore();
+			const cardStore = useCardStore();
+			const router = useRouter();
 			const route = useRoute();
 
-			const card = cardsStore.cards[route.params.id];
+			const cardId = route.params.cardId;
+			const card = cardStore.cards[cardId];
+
+			if (! card) router.push('/');
 
 			return {
 				card
@@ -29,8 +33,4 @@
 
 
 <style lang="scss">
-	// h1 {
-	// 	color: red;
-	// 	font-size: 500px;
-	// }
 </style>

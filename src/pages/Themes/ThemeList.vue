@@ -22,22 +22,21 @@ import { useThemeStore } from '@/stores/themes';
 		<button>Ajouter un Thème</button>
 	</router-link>
 
-	<div>
-		<li class="list" v-for="theme in themes" :key="theme.title">
+	<div class="list-theme" v-for="theme in themes" :key="theme.title">
+		<!-- <li class="list"  > -->
 			<ThemeComponent :theme="theme" />
-			<router-link :to="`/themes/${theme.title}`">
-				<button>modifier</button>
-			</router-link>
+
 			<!-- <button @click="deleteTheme(theme)">supprimer</button> -->
-		</li>
+		<!-- </li> -->
 	</div>
 </template>
 
 
 
 <style lang="scss" >
-	.list {
+	.list-theme {
 		display: flex;
 		justify-content: center;
+		align-items: center;
 	}
 </style>

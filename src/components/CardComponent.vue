@@ -88,12 +88,14 @@
 
 
 <style scoped lang="scss">
+
 	.cards__container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		margin: 2rem;
+
 	}
 	.card {
 		&__container {
@@ -102,6 +104,8 @@
 			-webkit-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			perspective: 1500px;
+			border: 0.5rem solid black;
+			border-radius: 1rem;
 		}
 
 		&__wrapper {
@@ -139,6 +143,14 @@
 					width: 75%;
 					height: 75%;
 				}
+			}
+		}
+		&--front {
+			& > h1 {
+				font-size: 2rem;
+				text-align: center;
+				padding: 1rem;
+
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 // import { get } from 'core-js/core/dict'
 import { defineStore } from 'pinia';
 import { useConfigStore } from './config';
+import { toKebabCase } from '@/utility';
 
 export const useCardStore = defineStore('cards', {
 	state: () => ({
@@ -9,9 +10,9 @@ export const useCardStore = defineStore('cards', {
 
 	actions: {
 		addCard(card, category) {
-			const id = encodeURIComponent(card.question);
+			const id = toKebabCase(card.question);
 
-			const newCard = {
+			const newCard = this.cards[id] = {
 				...card,
 				id: id,
 				level: 0,
@@ -29,12 +30,10 @@ export const useCardStore = defineStore('cards', {
 				};
 				reader.readAsDataURL(newCard.answerMedia);
 			}
-			else {
-				this.cards[id] = newCard;
-			}
-
 
 			console.log('Carte ajoutée: ', card);
+
+			return newCard;
 		},
 
 		removeCard(card) {
@@ -44,13 +43,13 @@ export const useCardStore = defineStore('cards', {
 
 
 		validate(id) {
-			const preferenceStore = useConfigStore();
+			const configStore = useConfigStore();
 
 			const card = this.cards[id];
 			if (! card) return;
 
 			card.level += 1;
-			if (card.level > preferenceStore.maxCardLevel) {
+			if (card.level > configStore.maxCardLevel) {
 				this.removeCard(card);
 				return;
 			}
@@ -81,9 +80,8 @@ export const useCardStore = defineStore('cards', {
 		},
 
 		todaysCards: (state) => {
-			const preferenceStore = useConfigStore();
-			const cardsPerDay = preferenceStore.cardsPerDay;
-			console.log(cardsPerDay);
+			const configStore = useConfigStore();
+			const cardsPerDay = configStore.cardsPerDay;
 
 			const MS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
@@ -98,19 +96,20 @@ export const useCardStore = defineStore('cards', {
 				return dayOffset === 0 || dayOffset >= Math.pow(2, card.level);
 			};
 
-			const cardsToReview = Object.values(state.cards)
-				.filter(shouldReviewCard)
-				.slice(0, cardsPerDay)
-				.filter(card => {
-					if (card.lastReview === null) return true;
+			const alreadyReviewed = (card) => {
+				if (card.lastReview === null) return true;
 
-					const lastReviewDay = Math.floor(new Date(card.lastReview).getTime() / MS_IN_A_DAY);
-					const dayOffset = today - lastReviewDay;
+				const lastReviewDay = Math.floor(new Date(card.lastReview).getTime() / MS_IN_A_DAY);
+				const dayOffset = today - lastReviewDay;
 
-					return dayOffset >= Math.pow(2, card.level);
-				});
+				return dayOffset >= Math.pow(2, card.level);
+			};
 
-			return cardsToReview;
+			return Object.values(state.cards)
+				.filter(shouldReviewCard) // Get all todo cards
+				.sort((a, b) => b.level - a.level ) // Bigger level first
+				.slice(0, cardsPerDay) // get only as many as the user wants
+				.filter(alreadyReviewed); // remove the ones already reviewed today
 		},
 	},
 

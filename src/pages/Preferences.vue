@@ -1,6 +1,7 @@
 <script>
 	import { ref } from 'vue';
 	import { useConfigStore } from '@/stores/config';
+import { timeToDate } from '@/utility';
 
 	export default {
 		name: 'PreferencesPage',
@@ -46,10 +47,7 @@
 				this.configStore.config.cardsPerDay = this.cardsPerDay;
 				this.configStore.config.maxCardLevel = this.maxCardLevel - 1;
 
-				const reminderDateTime = new Date();
-				const splitDateTime = this.reminderTime.split(':');
-				reminderDateTime.setHours(parseInt(splitDateTime[0]));
-				reminderDateTime.setMinutes(parseInt(splitDateTime[1]));
+				const reminderDateTime = timeToDate(this.reminderTime);
 
 				this.configStore.config.reminder.time = reminderDateTime;
 				this.configStore.config.reminder.enabled = this.reminderEnabled;

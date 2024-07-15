@@ -1,6 +1,7 @@
 <script>
 	import { ref } from 'vue';
 	import { useRoute, useRouter } from 'vue-router'
+	import { useThemeStore } from '@/stores/themes';
 	import { useCategoryStore } from '@/stores/categories';
 
 	export default {
@@ -8,20 +9,30 @@
 		props: {},
 
 		setup() {
+			const themeStore = useThemeStore();
 			const categoryStore = useCategoryStore();
-			const themeId = useRoute().params.themeId;
 			const router = useRouter();
+			const route = useRoute();
+
+			const themeId = route.params.themeId;
+			const theme = themeStore.themes[themeId];
+
+			if (! theme) router.push('/');
+
 
 			const newCategory = ref({
 				title: '',
 			});
+			const fileInputRef = ref(null);
+
 
 			const addCategory = () => {
-				categoryStore.addCategory(newCategory.value, themeId);
+				const addedCategory = categoryStore.addCategory(newCategory.value, themeId);
 
-				router.push(`/cards/list/${newCategory.value.title}`);
+				router.push(`/cards/list/${addedCategory.id}`);
 
 				newCategory.value.title = '';
+				if (fileInputRef.value) fileInputRef.value.value = null;
 			};
 
 			return {
@@ -29,13 +40,14 @@
 
 				addCategory,
 
+				theme,
 			};
 		}
 	};
 </script>
 
 <template>
-	<section>
+	<section v-if="theme">
 		<form class="create-category" @submit.prevent="addCategory">
 			<h1>Ajouter une Catégorie</h1>
 

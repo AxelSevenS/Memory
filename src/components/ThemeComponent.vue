@@ -21,15 +21,21 @@
 
 
 <template>
-	<router-link :to="`/categories/list/${theme.title}`">
-		<div class="theme__container" v-if="theme">
-			<div class="theme-content">
-				<h1>
-					{{ theme.title }}
-				</h1>
+
+	<div class="container__list">
+		<router-link class="theme__link" :to="`/categories/list/${theme.id}`">
+			<div class="theme__container" v-if="theme">
+				<div class="theme-content">
+					<h1>
+						Theme : {{ theme.title }}
+					</h1>
+				</div>
 			</div>
-		</div>
-	</router-link>
+		</router-link>
+		<router-link :to="`/themes/${theme.id}`">
+			<button class="button-modify">Modifier</button>
+		</router-link>
+	</div>
 </template>
 
 
@@ -42,14 +48,14 @@
 			margin: 1rem;
 			display: flex;
 			justify-content: center;
-			width: 10rem;
+			align-items: center;
+			width: 20rem;
 			height: 5rem;
 			-webkit-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			perspective: 1500px;
-			background-color: (var(--color-primary));
-			background-color: (var(--color-primary));
-			color: #f1f1f1;
+
+			color: black;
 
 		}
 		&-content :hover .theme__container {
@@ -57,5 +63,29 @@
 			background-color: black;
 			color: #f1f1f1;
 		}
+		&-link {
+			text-decoration: none;
+			color: white;
+			:hover {
+				color: black;
+				background-color:white
+			}
+
+		}
 	}
+
+	.button-modify {
+		padding: 25px;
+	}
+.container {
+	&__list {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background-color: #f1f1f1;
+		border: 1px solid black;
+		border-radius: 2px;
+		margin: 1rem;
+	}
+}
 </style>
