@@ -22,7 +22,6 @@
 
 		methods: {
 			validateAnswer: (state) => (card) => {
-				console.log(state);
 				state.cardStore.validate(card.id);
 			},
 
@@ -37,43 +36,44 @@
 
 
 <template>
-	<div v-if="card && card.question && card.answer">
+	<div class="cards__container" v-if="card && card.question && card.answer">
 
-		<h6 class="toggle-labels">
-			<span color="primary">Retourner</span>
-		</h6>
+		<h2 class="toggle-labels">
+			<span color="primary">Retourne moi</span>
+		</h2>
 
 		<label class="toggle-label" :class="{'flipped': flipRef}">
-			<input type="checkbox" class="toggle-btn" v-model="flipRef" />
+			<input type="checkbox" placeholder="<" class="toggle-btn" v-model="flipRef" />
+
 		</label>
 
 		<div class="card__container">
 			<div class="card__wrapper">
 
-				<div class="card--front">
+				<div class="card--front" @click="flipRef = !flipRef">
 					<h1>
 						{{ card.question }}
 					</h1>
 				</div>
 
 				<div class="card--back">
-					<h1>
-						{{ card.answer }}
-					</h1>
+					<div @click="flipRef = !flipRef">
+						<h1>{{ card.answer }}</h1>
 
-					<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
-						<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
+						<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
+							<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
 
-						<video controls v-if="card.answerMediaType.startsWith('video')">
-							<source :src="card.answerMedia" :type="card.answerMediaType">
-						</video>
+							<video controls v-if="card.answerMediaType.startsWith('video')">
+								<source :src="card.answerMedia" :type="card.answerMediaType">
+							</video>
 
-						<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
+							<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
+						</div>
 					</div>
 
 					<div v-if="isQuiz">
-						<button @click="cardStore.validate(card.id)">Correct</button>
-						<button @click="cardStore.invalidate(card.id)">Pas Correct</button>
+						<button @click="validateAnswer(card)">Correct</button>
+						<button @click="invalidateAnswer(card)">Pas Correct</button>
 					</div>
 				</div>
 
@@ -81,13 +81,20 @@
 		</div>
 
 	</div>
-
 </template>
 
 
 
-<style scoped lang="scss">
 
+
+<style scoped lang="scss">
+	.cards__container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin: 2rem;
+	}
 	.card {
 		&__container {
 			width: 50rem;
@@ -113,7 +120,7 @@
 			border-radius: 6px;
 			transform-style: preserve-3d;
 			-webkit-transform-style: preserve-3d;
-			padding: 1rem;
+			// padding: 1rem;
 			overflow: hidden;
 			background-color: #f1f1f1;
 
@@ -127,7 +134,7 @@
 
 			&__media {
 				img, video, audio {
-					padding:2rem;
+					// padding:2rem;
 					object-fit: cover;
 					width: 75%;
 					height: 75%;
@@ -141,6 +148,7 @@
 	.toggle {
 
 		&-btn {
+			width: 10rem;
 			display: none;
 		}
 
@@ -148,7 +156,7 @@
 			position: relative;
 			display: block;
 			width: 60px;
-			height: 16px;
+			height: 20px;
 			z-index: 10;
 
 			padding: 0;
@@ -164,13 +172,13 @@
 				display: block;
 				top: -10px;
 				left: -10px;
-				width: 36px;
-				height: 36px;
+				width: 40px;
+				height: 40px;
 
 				border-radius: 50%;
 				color: black;
 				background-color: #f1f1f1;
-				content: '\eb4f';
+				content: '>';
 				line-height: 36px;
 				text-align: center;
 				font-size: 24px;
@@ -180,7 +188,7 @@
 
 			&.flipped {
 				&:before {
-					transform: translateX(44px) rotate(-270deg);
+					transform: translateX(44px) rotate(180deg);
 				}
 
 				& ~ .card__container > .card__wrapper {

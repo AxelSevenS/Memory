@@ -11,7 +11,6 @@
 			const todaysCards = ref(cardStore.todaysCards);
 			cardStore.$subscribe(() => {
 				todaysCards.value = cardStore.todaysCards;
-
 			})
 
 			return {
@@ -24,14 +23,14 @@
 
 
 <template>
-	<div>
-		<h1>Home</h1>
+	<div class="home__title">
+		<h1>Bonjour !</h1>
 	</div>
-	<ul v-if="todaysCards.length !== 0">
+	<div v-if="todaysCards.length !== 0">
 		<li v-for="card in todaysCards" :key="card.title">
 			<CardComponent :card="card" :isQuiz="true" />
 		</li>
-	</ul>
+	</div>
 	<h2 v-else>
 		Il n'y a plus rien à réviser pour aujourd'hui ! :)
 	</h2>
@@ -40,8 +39,12 @@
 
 
 <style lang="scss">
-	// h1 {
-	// 	color: red;
-	// 	font-size: 500px;
-	// }
+
+	.home__title > h1 {
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+	}
 </style>

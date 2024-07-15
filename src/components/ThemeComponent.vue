@@ -39,15 +39,23 @@
 	.theme {
 
 		&__container {
+			margin: 1rem;
 			display: flex;
 			justify-content: center;
-			width: 5rem;
-			height: 10rem;
+			width: 10rem;
+			height: 5rem;
 			-webkit-transform-style: preserve-3d;
 			transform-style: preserve-3d;
 			perspective: 1500px;
-			background-color: #f1f1f1;
-			border-radius: 2rem;
+			background-color: (var(--color-primary));
+			background-color: (var(--color-primary));
+			color: #f1f1f1;
+
+		}
+		&-content :hover .theme__container {
+			cursor: pointer;
+			background-color: black;
+			color: #f1f1f1;
 		}
 	}
 </style>

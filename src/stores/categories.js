@@ -45,7 +45,7 @@ export const useCategoryStore = defineStore('categories', {
 	},
 
 	persist: {
-		storage: sessionStorage,
+		storage: localStorage,
 		paths: ['categories'],
 	},
 })

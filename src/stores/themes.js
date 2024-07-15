@@ -25,6 +25,14 @@ export const useThemeStore = defineStore('themes', {
 				delete this.themes[index];
 			}
 		},
+		modifyTheme(theme) {
+			const index = this.themes.indexOf(theme);
+
+			if (index >= 0) {
+				console.log('Thème modifié: ', theme);
+				this.themes[index] = theme;
+			}
+		}
 	},
 
 	getters: {
@@ -34,7 +42,7 @@ export const useThemeStore = defineStore('themes', {
 	},
 
 	persist: {
-		storage: sessionStorage,
+		storage: localStorage,
 		paths: ['themes'],
 	},
 });

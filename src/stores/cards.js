@@ -1,5 +1,6 @@
 // import { get } from 'core-js/core/dict'
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
+import { useConfigStore } from './config';
 
 export const useCardStore = defineStore('cards', {
 	state: () => ({
@@ -43,18 +44,17 @@ export const useCardStore = defineStore('cards', {
 
 
 		validate(id) {
-			console.log(this.cards);
+			const preferenceStore = useConfigStore();
+
 			const card = this.cards[id];
-			console.log(card);
 			if (! card) return;
 
 			card.level += 1;
-			if (card.level >= 7) {
+			if (card.level > preferenceStore.maxCardLevel) {
 				this.removeCard(card);
 				return;
 			}
 			card.lastReview = new Date(Date.now());
-			console.log(card);
 		},
 
 		invalidate(id) {
@@ -81,25 +81,41 @@ export const useCardStore = defineStore('cards', {
 		},
 
 		todaysCards: (state) => {
-			const today = Date.now() / 1000 / 60 / 60 / 24;
+			const preferenceStore = useConfigStore();
+			const cardsPerDay = preferenceStore.cardsPerDay;
+			console.log(cardsPerDay);
 
-			return Object.keys(state.cards)
-				.filter( id => {
-					const card = state.cards[id];
+			const MS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
+			const today = Math.floor(Date.now() / MS_IN_A_DAY);
+
+			const shouldReviewCard = (card) => {
+				if (card.lastReview === null) return true;
+
+				const lastReviewDay = Math.floor(new Date(card.lastReview).getTime() / MS_IN_A_DAY);
+				const dayOffset = today - lastReviewDay;
+
+				return dayOffset === 0 || dayOffset >= Math.pow(2, card.level);
+			};
+
+			const cardsToReview = Object.values(state.cards)
+				.filter(shouldReviewCard)
+				.slice(0, cardsPerDay)
+				.filter(card => {
 					if (card.lastReview === null) return true;
 
-					const lastReview = new Date(card.lastReview).getTime() / 1000 / 60 / 60 / 24;
-					const dateOffset = Math.floor(today - lastReview);
+					const lastReviewDay = Math.floor(new Date(card.lastReview).getTime() / MS_IN_A_DAY);
+					const dayOffset = today - lastReviewDay;
 
-					return dateOffset >= Math.pow(2, card.level);
-				})
-				.map( id => state.cards[id] );
+					return dayOffset >= Math.pow(2, card.level);
+				});
+
+			return cardsToReview;
 		},
 	},
 
 	persist: {
-		storage: sessionStorage,
+		storage: localStorage,
 		paths: ['cards'],
 	},
 })

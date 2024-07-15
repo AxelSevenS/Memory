@@ -1,15 +1,13 @@
 <script>
 	import { onMounted } from 'vue';
-	import { useReminderStore } from './stores/reminders';
-
+	import { useConfigStore } from './stores/config';
 
 	export default {
 		setup: () => {
-
 			onMounted(() => {
-				const remindersStore = useReminderStore();
+				const preferenceStore = useConfigStore();
 
-				remindersStore.scheduleReminders();
+				preferenceStore.awakenReminder();
 			})
 		}
 	}
@@ -21,7 +19,7 @@
 		|
 		<router-link to="/themes">Ajouter</router-link>
 		|
-		<router-link to="/reminders">Rappels</router-link>
+		<router-link to="/preferences">Préferences</router-link>
 	</nav>
 	<router-view />
 </template>
@@ -46,16 +44,46 @@
 		color: var(--color-accent);
 	}
 
+	a {
+		text-decoration: initial;
+	}
+
 	nav {
 		padding: 30px;
 
 		a {
-			font-weight: bold;
+			// font-weight: bold;
 			color: var(--color-accent);
 
 			&.router-link-exact-active {
 				color: var(--color-primary);
 			}
+		}
+	}
+
+
+	form {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 100%;
+		text-align: center;
+
+
+		& h1 {
+			font-size: 2rem;
+			font-weight: bold;
+			font-family: 'Russo One', sans-serif;
+		}
+
+		& label {
+			margin-top: 1rem;
+
+			// font-weight: bold;
+			font-family: 'Russo One', sans-serif;
+			display: flex;
+			justify-content: baseline;
 		}
 	}
 
@@ -85,7 +113,6 @@
 	}
 
 	button {
-
 		min-width: 50%;
 		min-height: 3rem;
 		margin: 1rem 0;
@@ -93,7 +120,6 @@
 		background-color: var(--color-primary);
 		color: var(--contrast-primary);
 		font-size: 1.5rem;
-		font-weight: bold;
 		font-family: 'Russo One', sans-serif;
 
 		border-radius: 5px;
@@ -106,7 +132,9 @@
 			color: var(--contrast-primary);
 		}
 	}
-	li{
+
+
+	li {
 		display: flex;
 		justify-content: center;
 	}

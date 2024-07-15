@@ -51,12 +51,12 @@ export default createRouter({
 				{
 					path: '',
 					component: () => import('./pages/Themes/ThemeList.vue').then(m => m.default),
-				},
+				}
 			]
 		},
 		{
-			path: '/reminders',
-			component: () => import('./pages/Reminders.vue').then(m => m.default)
+			path: '/preferences',
+			component: () => import('./pages/Preferences.vue').then(m => m.default)
 		},
 		{
 			path: '/',
