@@ -8,7 +8,7 @@ import ThemeComponent from './components/ThemeComponent';
 import router from './router';
 import pinia from './pinia';
 
-// import './registerServiceWorker';
+import './registerServiceWorker';
 
 createApp(App)
 .use(router)
