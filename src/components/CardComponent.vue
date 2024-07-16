@@ -58,6 +58,10 @@
 					</h1>
 
 					<button @click="flipCard">Retourner</button>
+
+					<router-link v-if="! isQuiz" :to="`/cards/${card.id}`">
+						<button class="button-modify">Modifier</button>
+					</router-link>
 				</div>
 
 				<div class="card--back">

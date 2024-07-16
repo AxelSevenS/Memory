@@ -38,14 +38,19 @@ export const useThemeStore = defineStore('themes', {
 				delete this.themes[index];
 			}
 		},
-		modifyTheme(theme) {
-			const index = this.themes.indexOf(theme);
 
-			if (index >= 0) {
-				console.log('Thème modifié: ', theme);
-				this.themes[index] = theme;
-			}
-		}
+		updateTheme(id, theme) {
+			const oldTheme = this.themes[id];
+			const newTheme = this.themes[id] = {
+				...oldTheme,
+				...theme,
+				id: id,
+			};
+
+			console.log('Thème modifié: ', newTheme);
+
+			return newTheme;
+		},
 	},
 
 	getters: {

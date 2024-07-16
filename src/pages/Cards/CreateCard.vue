@@ -35,7 +35,7 @@
 			};
 
 			const addCard = () => {
-				const addedCard = cardStore.addCard(newCard.value, route.params.categoryId);
+				const addedCard = cardStore.addCard(newCard.value, categoryId);
 
 				router.push(`/cards/${addedCard.id}`)
 

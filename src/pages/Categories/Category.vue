@@ -1,10 +1,12 @@
 <script>
-	import { useRoute, useRouter } from 'vue-router';
+	import { ref } from 'vue';
+	import { useRoute, useRouter } from 'vue-router'
 	import { useCategoryStore } from '@/stores/categories';
 
 	export default {
-		name: 'CategoryPage',
+		name: 'CreateCategoryPage',
 		props: {},
+
 		setup() {
 			const categoryStore = useCategoryStore();
 			const router = useRouter();
@@ -15,30 +17,44 @@
 
 			if (! category) router.push('/');
 
+
+			const editedCategory = ref({
+				title: category.title,
+			});
+
+
+			const updateCategory = () => {
+				categoryStore.updateCategory(categoryId, editedCategory.value);
+			};
+
 			return {
-				category
+				editedCategory,
+
+				updateCategory,
+
+				category,
 			};
 		}
-	}
+	};
 </script>
 
-
-
 <template>
-	<router-link :to="`/categories/list/${themeId}`">
+	<router-link :to="`/categories/list/${category.theme}`">
 		<button>Retour</button>
 	</router-link>
+	<section>
+		<form class="create-category" @submit.prevent="updateCategory">
+			<h1>Modifier une Catégorie</h1>
 
-	<div>
-		<h1>Categorie</h1>
-	</div>
+			<label for="title">Titre: </label>
+			<input type="text" id="title" v-model="editedCategory.title" required />
+
+			<button type="submit">Valider</button>
+		</form>
+	</section>
 </template>
 
 
 
-<style lang="scss">
-	// h1 {
-	// 	color: red;
-	// 	font-size: 500px;
-	// }
+<style lang="scss" scoped>
 </style>

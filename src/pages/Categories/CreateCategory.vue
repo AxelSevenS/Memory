@@ -23,7 +23,6 @@
 			const newCategory = ref({
 				title: '',
 			});
-			const fileInputRef = ref(null);
 
 
 			const addCategory = () => {
@@ -32,7 +31,6 @@
 				router.push(`/cards/list/${addedCategory.id}`);
 
 				newCategory.value.title = '';
-				if (fileInputRef.value) fileInputRef.value.value = null;
 			};
 
 			return {

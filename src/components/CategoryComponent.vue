@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</router-link>
-		<router-link :to="`/category/${category.title}`">
+		<router-link :to="`/categories/${category.id}`">
 			<button class="button-modify">Modifier</button>
 		</router-link>
 	</div>

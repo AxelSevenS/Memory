@@ -69,6 +69,30 @@ export const useCardStore = defineStore('cards', {
 			delete this.cards[card.id];
 		},
 
+		updateCard(id, card) {
+			const oldCard = this.cards[id];
+			const newCard = this.cards[id] = {
+				...oldCard,
+				...card,
+				id: id,
+			};
+
+			if (newCard.answerMedia) {
+				const reader = new FileReader();
+
+				reader.onload = (e) => {
+					newCard.answerMediaType = newCard.answerMedia.type;
+					newCard.answerMedia = e.target.result;
+					this.cards[id] = newCard;
+				};
+				reader.readAsDataURL(newCard.answerMedia);
+			}
+
+			console.log('Carte Modifiée: ', card);
+
+			return newCard;
+		},
+
 
 		validate(id) {
 			const configStore = useConfigStore();

@@ -47,6 +47,19 @@ export const useCategoryStore = defineStore('categories', {
 				delete this.categories[index];
 			}
 		},
+
+		updateCategory(id, category) {
+			const oldCategory = this.categories[id];
+			const newCategory = this.categories[id] = {
+				...oldCategory,
+				...category,
+				id: id,
+			};
+
+			console.log('Catégorie modifiée: ', newCategory);
+
+			return newCategory;
+		},
 	},
 
 	getters: {
