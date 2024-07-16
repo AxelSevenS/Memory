@@ -4,7 +4,24 @@ import { defineStore } from 'pinia'
 
 export const useCategoryStore = defineStore('categories', {
 	state: () => ({
-		categories: {},
+		categories: {
+			'astrologie': {
+				id: 'astrologie',
+				title: 'Astrologie',
+				theme: 'science'
+			},
+			'geologie': {
+				id: 'geologie',
+				title: 'Géologie',
+				theme: 'science'
+			},
+
+			'olivier-benoit': {
+				id: 'olivier-benoit',
+				title: 'Olivier Benoit',
+				theme: 'comedie'
+			}
+		},
 	}),
 
 	actions: {

@@ -138,9 +138,12 @@
 	}
 
 
-	li {
+	.item-list {
+		width: 100%;
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
+		align-items: center;
 	}
 
 

@@ -1,24 +1,24 @@
-# memory
+# Project Memory: Pham, Sevenet
 
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Start in Development Mode
+```
+npm install serve
+```
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+
+### Start in Production Mode (with PWA and Service Worker)
 ```
 npm run build
 ```
-
-### Lints and fixes files
 ```
-npm run lint
+serve -s dist -l 8080
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+(If serve doesn't work, do this, then try again: ``npm install --global serve``)

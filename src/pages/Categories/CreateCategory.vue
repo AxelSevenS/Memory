@@ -47,6 +47,9 @@
 </script>
 
 <template>
+	<router-link :to="`/categories/list/${themeId}`">
+		<button>Retour</button>
+	</router-link>
 	<section v-if="theme">
 		<form class="create-category" @submit.prevent="addCategory">
 			<h1>Ajouter une Catégorie</h1>

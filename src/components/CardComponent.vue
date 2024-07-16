@@ -1,74 +1,76 @@
-<script>
+<script setup>
 	import { ref } from 'vue';
 	import { useCardStore } from '@/stores/cards';
+	import { defineProps } from 'vue';
+	import { MS_IN_A_DAY } from '@/utility';
 
+	// Définir les props
+	const props = defineProps({
+		card: Object,
+		isQuiz: Boolean,
+	});
 
-	export default {
-		name: 'CardComponent',
-		props: [
-			'card',
-			'isQuiz'
-		],
+	const alreadyReviewed = (card) => {
+		if (card.lastReview === null) return false;
 
-		setup() {
-			const cardStore = useCardStore();
-			const flipRef = ref(false);
+		const today = new Date(Date.now());
 
-			return {
-				cardStore,
-				flipRef,
-			};
-		},
+		const lastReviewDay = Math.floor(new Date(card.lastReview).getTime() / MS_IN_A_DAY);
+		const dayOffset = today - lastReviewDay;
 
-		methods: {
-			validateAnswer: (state) => (card) => {
-				state.cardStore.validate(card.id);
-			},
+		return dayOffset !== 0;
+	};
 
-			invalidateAnswer: (state) => (card) => {
-				state.cardStore.invalidate(card.id);
-			},
-		},
-	}
+	const flipRef = ref(false);
+	const wasReviewed = ref(alreadyReviewed(props.card));
 
+	const cardStore = useCardStore();
+	cardStore.$subscribe(() => {
+		wasReviewed.value = alreadyReviewed(props.card)
+		console.log(wasReviewed);
+	})
+
+	const validateAnswer = (card) => {
+		cardStore.validate(card.id);
+	};
+
+	const invalidateAnswer = (card) => {
+		cardStore.invalidate(card.id);
+	};
+
+	const flipCard = () => {
+		flipRef.value = ! flipRef.value;
+	};
 </script>
 
 
 
+
 <template>
-	<div class="cards__container" v-if="card && card.question && card.answer">
-
-		<h2 class="toggle-labels">
-			<span color="primary">Retourne moi</span>
-		</h2>
-
-		<label class="toggle-label" :class="{'flipped': flipRef}">
-			<input type="checkbox" placeholder="<" class="toggle-btn" v-model="flipRef" />
-
-		</label>
+	<div class="cards__container" v-if="! (isQuiz && wasReviewed) && card && card.question && card.answer">
 
 		<div class="card__container">
-			<div class="card__wrapper">
+			<div class="card__wrapper" :class="{'flipped': flipRef}">
 
-				<div class="card--front" @click="flipRef = !flipRef">
+				<div class="card--front">
 					<h1>
 						{{ card.question }}
 					</h1>
+
+					<button @click="flipCard">Retourner</button>
 				</div>
 
 				<div class="card--back">
-					<div @click="flipRef = !flipRef">
-						<h1>{{ card.answer }}</h1>
+					<h1>{{ card.answer }}</h1>
 
-						<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
-							<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
+					<div class="card--back__media" v-if="card.answerMedia && card.answerMediaType">
+						<img v-if="card.answerMediaType.startsWith('image')" :src="card.answerMedia" alt="image" />
 
-							<video controls v-if="card.answerMediaType.startsWith('video')">
-								<source :src="card.answerMedia" :type="card.answerMediaType">
-							</video>
+						<video controls v-if="card.answerMediaType.startsWith('video')">
+							<source :src="card.answerMedia" :type="card.answerMediaType">
+						</video>
 
-							<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
-						</div>
+						<audio controls v-if="card.answerMediaType.startsWith('audio')" :src="card.answerMedia"></audio>
 					</div>
 
 					<div v-if="isQuiz">
@@ -114,6 +116,10 @@
 			transform-style: preserve-3d;
 			-webkit-transform-style: preserve-3d;
 			transition: all 600ms ease-out;
+
+			&.flipped {
+				transform: rotateY(180deg);
+			}
 		}
 
 		&--front, &--back {
@@ -162,51 +168,6 @@
 		&-btn {
 			width: 10rem;
 			display: none;
-		}
-
-		&-label {
-			position: relative;
-			display: block;
-			width: 60px;
-			height: 20px;
-			z-index: 10;
-
-			padding: 0;
-			margin-top: 10px;
-			margin-bottom: calc(10px + 1rem);
-			text-align: center;
-			border-radius: 8px;
-			cursor: pointer;
-			background-color: #f1f1f1;
-
-			&:before {
-				position: absolute;
-				display: block;
-				top: -10px;
-				left: -10px;
-				width: 40px;
-				height: 40px;
-
-				border-radius: 50%;
-				color: black;
-				background-color: #f1f1f1;
-				content: '>';
-				line-height: 36px;
-				text-align: center;
-				font-size: 24px;
-				transition: all 0.5s ease;
-			}
-
-
-			&.flipped {
-				&:before {
-					transform: translateX(44px) rotate(180deg);
-				}
-
-				& ~ .card__container > .card__wrapper {
-					transform: rotateY(180deg);
-				}
-			}
 		}
 	}
 </style>

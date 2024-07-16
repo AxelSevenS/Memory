@@ -18,25 +18,20 @@ import { useThemeStore } from '@/stores/themes';
 </script>
 
 <template>
+	<router-link :to="`/`">
+		<button>Retour</button>
+	</router-link>
 	<router-link to="/themes/create">
 		<button>Ajouter un Thème</button>
 	</router-link>
 
-	<div class="list-theme" v-for="theme in themes" :key="theme.title">
-		<!-- <li class="list"  > -->
-			<ThemeComponent :theme="theme" />
-
-			<!-- <button @click="deleteTheme(theme)">supprimer</button> -->
-		<!-- </li> -->
+	<div class="item-list">
+		<ThemeComponent v-for="theme in themes" :key="theme.title" :theme="theme" />
+		<!-- <button @click="deleteTheme(theme)">supprimer</button> -->
 	</div>
 </template>
 
 
 
 <style lang="scss" >
-	.list-theme {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
 </style>

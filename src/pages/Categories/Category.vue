@@ -25,6 +25,10 @@
 
 
 <template>
+	<router-link :to="`/categories/list/${themeId}`">
+		<button>Retour</button>
+	</router-link>
+
 	<div>
 		<h1>Categorie</h1>
 	</div>

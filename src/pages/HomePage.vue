@@ -1,23 +1,15 @@
-<script>
+
+<script setup>
 	import { useCardStore } from '@/stores/cards';
 	import { ref } from 'vue';
 
-	export default {
-		name: 'HomePage',
-		props: {},
-		setup() {
-			const cardStore = useCardStore();
+	const cardStore = useCardStore();
 
-			const todaysCards = ref(cardStore.todaysCards);
-			cardStore.$subscribe(() => {
-				todaysCards.value = cardStore.todaysCards;
-			})
+	const todaysCards = ref(cardStore.todaysCards);
+	cardStore.$subscribe(() => {
+		todaysCards.value = cardStore.todaysCards;
+	})
 
-			return {
-				todaysCards
-			};
-		},
-	}
 </script>
 
 
@@ -27,9 +19,7 @@
 		<h1>Bonjour !</h1>
 	</div>
 	<div v-if="todaysCards.length !== 0">
-		<li v-for="card in todaysCards" :key="card.title">
-			<CardComponent :card="card" :isQuiz="true" />
-		</li>
+		<CardComponent v-for="card in todaysCards" :key="card.title" :card="card" :isQuiz="true" />
 	</div>
 	<h2 v-else>
 		Il n'y a plus rien à réviser pour aujourd'hui ! :)

@@ -29,7 +29,6 @@ import { timeToDate } from '@/utility';
 					reminderDateTime = new Date();
 				}
 				reminderTime.value = `${reminderDateTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
-				console.log(reminderTime);
 				reminderEnabled.value = configStore.config.reminder.enabled;
 			})
 

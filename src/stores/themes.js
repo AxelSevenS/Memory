@@ -3,13 +3,22 @@ import { defineStore } from 'pinia';
 
 export const useThemeStore = defineStore('themes', {
 	state: () => ({
-		themes: {},
+		themes: {
+			science: {
+				id: 'science',
+				title: 'Science'
+			},
+
+			comedie: {
+				id: 'comedie',
+				title: 'Comédie'
+			}
+		},
 	}),
 
 	actions: {
 		addTheme(theme) {
 			const id = toKebabCase(theme.title);
-			console.log(toKebabCase('SeXe Anal Wawéé'));
 
 			const newTheme = this.themes[id] = {
 				...theme,

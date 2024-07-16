@@ -52,12 +52,17 @@
 
 				addCard,
 				updateMedia,
+
+				categoryId,
 			};
 		}
 	};
 </script>
 
 <template>
+	<router-link :to="`/cards/list/${categoryId}`">
+		<button>Retour</button>
+	</router-link>
 	<section>
 		<form class="create-card" @submit.prevent="addCard">
 			<h1>Ajouter une Carte</h1>

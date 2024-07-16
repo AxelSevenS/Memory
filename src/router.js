@@ -11,7 +11,7 @@ export default createRouter({
 					component: () => import('./pages/Cards/CreateCard.vue').then(m => m.default),
 				},
 				{
-					path: ':id',
+					path: ':cardId',
 					component: () => import('./pages/Cards/Card.vue').then(m => m.default),
 				},
 				{
@@ -28,7 +28,7 @@ export default createRouter({
 					component: () => import('./pages/Categories/CreateCategory.vue').then(m => m.default),
 				},
 				{
-					path: ':id',
+					path: ':categoryId',
 					component: () => import('./pages/Categories/Category.vue').then(m => m.default),
 				},
 				{
@@ -45,7 +45,7 @@ export default createRouter({
 					component: () => import('./pages/Themes/CreateTheme.vue').then(m => m.default),
 				},
 				{
-					path: ':id',
+					path: ':themeId',
 					component: () => import('./pages/Themes/Theme.vue').then(m => m.default),
 				},
 				{
@@ -60,7 +60,7 @@ export default createRouter({
 		},
 		{
 			path: '/',
-			component: () => import('./pages/Home.vue').then(m => m.default)
+			component: () => import('./pages/HomePage.vue').then(m => m.default)
 		},
 	]
 });

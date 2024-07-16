@@ -21,7 +21,7 @@
 			const filteredCards = cardStore.fromCategory(categoryId);
 
 			return {
-				categoryId: categoryId,
+				category: category,
 				cards: filteredCards,
 			};
 		}
@@ -29,22 +29,17 @@
 </script>
 
 <template>
-
-	<h1>Cartes</h1>
-	<router-link :to="`/cards/create/${categoryId}`">
-		<button>Ajouter une carte</button>
-	</router-link>
-	<router-link :to="`/themes/`">
+	<router-link :to="`/categories/list/${category.theme}`">
 		<button>Retour</button>
 	</router-link>
+	<router-link :to="`/cards/create/${category.id}`">
+		<button>Ajouter une carte</button>
+	</router-link>
+
 	<div class="component__container">
 		<div v-for="card in cards" :key="card.title">
 			<CardComponent :card="card" />
-			<router-link :to="`/cards/create/${categoryId}`">
-				<button>Ajouter une Carte</button>
-			</router-link>
 		</div>
-
 	</div>
 
 

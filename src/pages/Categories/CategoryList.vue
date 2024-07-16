@@ -16,7 +16,6 @@
 			const themeId = route.params.themeId;
 			const theme = themeStore.themes[themeId];
 
-			console.log(themeId);
 			if (! theme) router.push('/');
 
 
@@ -31,15 +30,16 @@
 </script>
 
 <template>
+	<router-link :to="`/themes`">
+		<button>Retour</button>
+	</router-link>
 	<router-link :to="`/categories/create/${themeId}`">
 		<button>Ajouter une Catégorie</button>
 	</router-link>
 
-	<ul>
-		<li v-for="category in categories" :key="category.title">
-			<CategoryComponent :category="category" />
-		</li>
-	</ul>
+	<div class="item-list">
+		<CategoryComponent v-for="category in categories" :key="category.title" :category="category" />
+	</div>
 </template>
 
 

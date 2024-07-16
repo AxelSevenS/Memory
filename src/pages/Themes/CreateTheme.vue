@@ -34,6 +34,9 @@
 </script>
 
 <template>
+	<router-link :to="`/themes`">
+		<button>Retour</button>
+	</router-link>
 	<section>
 		<form class="create-theme" @submit.prevent="addTheme">
 			<h1>Ajouter un Thème</h1>
